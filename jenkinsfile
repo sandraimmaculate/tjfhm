@@ -17,7 +17,7 @@ pipeline {
         stage('Update & Upgrade System') {
             steps {
                 sh '''
-                    sudo apt-get update -y && sudo apt-get upgrade -y
+                    apt-get update -y && sudo apt-get upgrade -y
                 '''
             }
         }
@@ -25,8 +25,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh '''
-                    sudo apt-get install -y build-essential openjdk-8-jdk ant ant-optional ruby git maven software-properties-common
-                    sudo apt-get install -y wget dpkg-dev debhelper devscripts dh-make fakeroot lintian
+                    apt-get install -y build-essential openjdk-8-jdk ant ant-optional ruby git maven software-properties-common
+                    apt-get install -y wget dpkg-dev debhelper devscripts dh-make fakeroot lintian
                 '''
             }
         }
