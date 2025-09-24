@@ -1,0 +1,7 @@
+while IFS = read -r line
+do 
+  echo $line 
+done > myline.txt
+4 read 
+2 write 
+1 execute
