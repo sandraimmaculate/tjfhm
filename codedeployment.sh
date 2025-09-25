@@ -1,3 +1,4 @@
+#!/bin/bash
 mkdir /jesus
 cd /jesus
 apt-get update 
