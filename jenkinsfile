@@ -12,11 +12,9 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no $TARGET_USER@$TARGET_SERVER << 'ENDSSH'
                         # Pull latest deploy.sh from Git
                         cd /tmp
-                        rm -rf boost-deploy
-                        git clone -b distrigoboostppv3_hotfix_qa https://git.izmocars.com/psms/distrigoboost/boost-private.git boost-deploy
-                        cd boost-deploy
-                        chmod +x deploy.sh
-                        ./deploy.sh
+                        git clone -b https://github.com/sandraimmaculate/tjfhm.git
+                        chmod +x codedeployment.sh
+                        ./codedeployment.sh
                     ENDSSH
                     """
                 }
