@@ -1,5 +1,5 @@
 #!/bin/bash
-mkdir /jesus
+mkdir -p /home/jenkins/jesus
 cd /jesus
 apt-get update 
 touch thankyoujesus 
