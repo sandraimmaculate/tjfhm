@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    environment {
+        TARGET_SERVER = "13.60.80.114"
+        TARGET_USER   = "jenkins"
+    }
+    stages {
+        stage('Deploy from Git') {
+            steps {
+                sshagent(['ssh-qa-server']) {
+                    sh """
+                    ssh -o StrictHostKeyChecking=no $TARGET_USER@$TARGET_SERVER << 'ENDSSH'
+                        # Pull latest deploy.sh from Git
+                        cd /tmp
+                        rm -rf boost-deploy
+                        git clone -b distrigoboostppv3_hotfix_qa https://git.izmocars.com/psms/distrigoboost/boost-private.git boost-deploy
+                        cd boost-deploy
+                        chmod +x deploy.sh
+                        ./deploy.sh
+                    ENDSSH
+                    """
+                }
+            }
+        }
+    }
+}
