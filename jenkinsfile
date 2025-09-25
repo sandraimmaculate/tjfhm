@@ -1,0 +1,82 @@
+pipeline {
+    agent {
+        docker {
+            image 'ubuntu:22.04'  // You can choose the appropriate Docker image.
+            args '-v /home/ubuntu/zm-builds:/zm-builds'  // Mount the host directory to preserve build artifacts.
+        }
+    }
+    
+    environment {
+        JAVA_HOME = "/usr/lib/jvm/java-8-openjdk-amd64"
+        PATH = "${JAVA_HOME}/bin:$PATH"
+        BUILD_DIR = "/home/ubuntu/zm-build"
+    }
+
+    stages {
+        
+        stage('Update & Upgrade System') {
+            steps {
+                sh '''
+                    apt-get update -y && apt-get upgrade -y
+                '''
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                    apt-get install -y build-essential openjdk-8-jdk ant ant-optional ruby git maven software-properties-common
+                    apt-get install -y wget dpkg-dev debhelper devscripts dh-make fakeroot lintian
+                '''
+            }
+        }
+
+        stage('Clone Zimbra Repository') {
+            steps {
+                sh '''
+                    if [ ! -d ${BUILD_DIR} ]; then
+                        git clone https://github.com/Zimbra/zm-build.git ${BUILD_DIR}
+                    else
+                        cd ${BUILD_DIR} && git pull
+                    fi
+                '''
+            }
+        }
+
+        stage('Run Zimbra Build') {
+            steps {
+                dir("${BUILD_DIR}") {
+                    sh '''
+                        ./build.pl \
+                        --build-no 10110 \
+                        --build-release GA \
+                        --build-release-no 10.1.10 \
+                        --build-type FOSS \
+                        --build-release-candidate GA \
+                        --build-thirdparty-server https://files.zimbra.com/downloads/thirdparty/ \
+                        | tee build.log
+                    '''
+                }
+            }
+        }
+
+        stage('Archive Build Output') {
+            steps {
+                sh '''
+                    cd ${BUILD_DIR}/../zm-builds
+                    ls -lh
+                '''
+                archiveArtifacts artifacts: '/zm-builds/**/zcs-10.1.10_GA_10110.UBUNTU22_64.*.tgz', fingerprint: true
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ Zimbra 10.1.10 build completed successfully. Artifact archived."
+        }
+        failure {
+            echo "❌ Zimbra build failed. Check build.log for details."
+        }
+    }
+}
