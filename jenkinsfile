@@ -7,13 +7,13 @@ pipeline {
     stages {
         stage('Deploy from Git') {
             steps {
-                sshagent(['ssh-qa-server']) {
+                sshagent(['704fb461-cf6d-4f4b-9c8f-56233a6b34d4']) { // Jenkins credentials ID
                     sh """
-                    ssh -o StrictHostKeyChecking=no $TARGET_USER@$TARGET_SERVER << 'ENDSSH'
-                        # Pull latest deploy.sh from Git
+                    ssh -o StrictHostKeyChecking=no $TARGET_USER@$TARGET_SERVER << ENDSSH
                         cd /tmp
+                        rm -rf tjfhm
                         git clone -b test https://github.com/sandraimmaculate/tjfhm.git
-                        cd /tjfhm
+                        cd tjfhm
                         chmod +x codedeployment.sh
                         ./codedeployment.sh
                     ENDSSH
@@ -23,3 +23,4 @@ pipeline {
         }
     }
 }
+
