@@ -11,7 +11,11 @@ pipeline {
                     sh """
                     ssh -o StrictHostKeyChecking=no $TARGET_USER@$TARGET_SERVER << ENDSSH
                         cd /tmp
+<<<<<<< HEAD
                         rm -rf tjfhm
+=======
+                        rm -rf workspace
+>>>>>>> a2d778d4f1ad588e8cadd5bdd3365fd30986a4fd
                         git clone -b test https://github.com/sandraimmaculate/tjfhm.git
                         cd tjfhm
                         chmod +x codedeployment.sh
