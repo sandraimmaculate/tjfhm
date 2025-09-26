@@ -4,3 +4,4 @@ cd /home/jenkins/jesus
 apt-get update 
 touch thankyoujesus.txt
 echo "working" > thankyoujesus.txt
+echo "ok try once again" >> thankyoujesus.txt
