@@ -12,10 +12,9 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no $TARGET_USER@$TARGET_SERVER << 'ENDSSH'
                         # Pull latest deploy.sh from Git
                         #cd /tmp
-                        cd /home/jenkins/
                         #rm -rf workspace
                         git clone -b test https://github.com/sandraimmaculate/tjfhm.git
-                        cd /tjfhm
+                        cd /home/jenkins/tjfhm
                         chmod +x codedeployment.sh
                         ./codedeployment.sh
                     ENDSSH
