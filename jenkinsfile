@@ -9,15 +9,21 @@ pipeline {
             steps {
                 sshagent(['3b17d0d9-2524-4dd6-9ddf-90bf4e92dcaf']) {
                     sh """
-                    ssh -o StrictHostKeyChecking=no $TARGET_USER@$TARGET_SERVER << 'ENDSSH'
-                        # Pull latest deploy.sh from Git
-                        #cd /tmp
-                        rm -rf /home/jenkins/tjfhm
-                        git clone -b test https://github.com/sandraimmaculate/tjfhm.git
-                        cd /home/jenkins/tjfhm
-                        chmod +x codedeployment.sh
-                        ./codedeployment.sh
-                    ENDSSH
+                        ssh -o StrictHostKeyChecking=no $TARGET_USER@$TARGET_SERVER "
+                            # Update system and install git (requires sudo)
+                            sudo apt-get update -y && sudo apt-get install -y git
+
+                            # Clean old code
+                            rm -rf /home/jenkins/tjfhm
+
+                            # Clone repo
+                            git clone -b test https://github.com/sandraimmaculate/tjfhm.git /home/jenkins/tjfhm
+
+                            # Run deployment script
+                            cd /home/jenkins/tjfhm
+                            chmod +x codedeployment.sh
+                            ./codedeployment.sh
+                        "
                     """
                 }
             }
