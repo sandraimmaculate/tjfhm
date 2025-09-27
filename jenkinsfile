@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        TARGET_SERVER = "16.171.15.62"
+        TARGET_SERVER = "16.170.204.45"
         TARGET_USER   = "jenkins"
     }
     stages {
