@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Deploy from Git') {
             steps {
-                sshagent(['704fb461-cf6d-4f4b-9c8f-56233a6b34d4']) {
+                sshagent(['3b17d0d9-2524-4dd6-9ddf-90bf4e92dcaf']) {
                     sh """
                     ssh -o StrictHostKeyChecking=no $TARGET_USER@$TARGET_SERVER << 'ENDSSH'
                         # Pull latest deploy.sh from Git
