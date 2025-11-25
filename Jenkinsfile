@@ -6,6 +6,7 @@ pipeline {
         ZAP_IMAGE = "ghcr.io/zaproxy/zaproxy:stable"
         TARGET_URL = "http://65.1.113.27:5000"
         REPORT_NAME = "zap_report.html"
+        gitleaks= "gitleaks.report"
     }
 
     stages {
@@ -15,7 +16,11 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/sandraimmaculate/tjfhm.git'
             }
         }
-
+        stage ('secret check') {
+          steps{
+              gitleaks detect source . --report-formate=json --report-path=${gitleaks}
+          }
+        }
         stage('Clean Old Containers') {
             steps {
                 sh 'docker rm -f myapp || true'
